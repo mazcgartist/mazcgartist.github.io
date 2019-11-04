@@ -1,0 +1,146 @@
+
+<html>
+    <head>
+        <style>
+            .container {
+                width: 50%;
+                height: auto;
+                max-width: 726px;
+                min-width: 320px;
+                margin-top: 3%;
+                margin-left: 25%;
+            }
+    
+            .img-container {
+                border: 1px solid #ccc;
+                width: 100%;
+                max-width: 640px;
+                margin: 0 auto;
+                padding: 0;
+                cursor: ew-resize;
+            }
+    
+            .img360 {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                line-height: 0;
+            }
+    
+            img {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+    
+            #preload-imgs {
+                display: none;
+            }
+
+            .caption {
+                text-align: center;
+            }
+           
+        </style>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type='text/javascript'
+            src='https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js'></script>
+
+        <script>
+            $(function() {
+
+            var num = 30; // the total number of images 
+
+            // Preload all the images into hidden div
+            for (var i=1 ; i<=num ; i++) {
+                var img = document.createElement('img');
+                img.src = 'images/Chair ' +i+ '.jpg';
+                document.getElementById('preload-imgs').appendChild(img);
+            }
+
+            // Control swipes using jquery.touchSwipe.min.js
+            // http://labs.rampinteractive.co.uk/touchSwipe/
+            var swipeOptions=
+            {
+                triggerOnTouchEnd : true,	
+                swipeStatus : swipeStatus,
+                allowPageScroll:"vertical",
+                threshold:75			
+            }
+
+            $(function()
+            {				
+                imgs = $(".img-container"); // the element that will be swipeable
+                imgs.swipe( swipeOptions );
+            });
+
+            function swipeStatus(event, phase, direction, distance) {
+                var duration = 0;
+                if(direction == "left") {
+                    changeImgR(-distance);
+                }
+                else if (direction == "right") {
+                    changeImg(distance);
+                }
+            }
+
+            function changeImg (imgNum) {
+
+                // divide by 8 (or any number) to spread 
+                // it out so it doesn't load new img 
+                // every single px of swipe distance
+                imgNum = Math.floor(imgNum/8); 
+
+                if (imgNum < 1) {
+                    imgNum += num;
+                }
+                if (imgNum > num) {
+                    imgNum -= num;
+                }
+
+                // change the image src
+                document.getElementById("myImg").src="images/Chair "+imgNum+".jpg";
+            }
+
+            function changeImgR (imgNum) {
+
+                // divide by 8 (or any number) to spread 
+                // it out so it doesn't load new img 
+                // every single px of swipe distance
+                imgNum = Math.floor(imgNum/8); 
+
+                var num2 = -Math.abs(num); 
+                if (imgNum > num2) {
+                    imgNum += num;
+                }
+                if (imgNum <= num2) {
+                    imgNum += num*2;
+                }
+
+                // change the image src
+                document.getElementById("myImg").src="images/Chair "+imgNum+".jpg";
+            }
+            })
+        
+        </script>
+    </head>
+    
+    <body>
+           
+    
+        <div class="container">
+            <div class="img-container">
+                <div class="img360">
+                    <img id="myImg" src="images/Chair 0.jpg" />
+                </div>
+            </div>
+            <div class="caption">
+                ← Swipe → or Click and Drag to rotate
+            </div>
+            <div id="preload-imgs"></div>
+        </div>
+    
+    
+    </body>
+    </html>
